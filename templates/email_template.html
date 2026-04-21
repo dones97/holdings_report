@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Portfolio Digest — {{ week_ending }}</title>
+<style>
+  /* Reset */
+  body, table, td, p, a, li, blockquote {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+
+  /* Base */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #0d0d1a;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  .email-wrapper {
+    width: 100%;
+    background-color: #0d0d1a;
+  }
+
+  .email-container {
+    max-width: 680px;
+    margin: 0 auto;
+    background-color: #0d0d1a;
+  }
+
+  /* ── Header ─────────────────────────────────────── */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 40px 40px 32px 40px;
+    border-radius: 0 0 0 0;
+  }
+
+  .header-label {
+    display: inline-block;
+    background: rgba(99, 179, 237, 0.15);
+    color: #63b3ed;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(99, 179, 237, 0.3);
+    margin-bottom: 16px;
+  }
+
+  .header-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+  }
+
+  .header-subtitle {
+    font-size: 14px;
+    color: #8892b0;
+    margin: 0 0 28px 0;
+  }
+
+  .stats-row {
+    display: table;
+    width: 100%;
+  }
+
+  .stat-cell {
+    display: table-cell;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    text-align: center;
+    width: 30%;
+  }
+
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #ffffff;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: #8892b0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  /* ── Portfolio Summary ───────────────────────────── */
+  .summary-section {
+    padding: 28px 40px;
+    background-color: #111127;
+    border-left: 3px solid #4c9be8;
+    margin: 0;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #4c9be8;
+    margin: 0 0 10px 0;
+  }
+
+  .summary-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #cdd6f4;
+    margin: 0;
+  }
+
+  /* ── Section Header ───────────────────────────────── */
+  .section-header {
+    padding: 24px 40px 12px 40px;
+    background-color: #0d0d1a;
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #4c9be8;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* ── Holding Card ─────────────────────────────────── */
+  .holding-card {
+    margin: 0 24px 16px 24px;
+    background-color: #141428;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.07);
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 18px 24px;
+    background: linear-gradient(90deg, #1a1a35 0%, #141428 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .company-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .company-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin: 0;
+  }
+
+  .company-symbol {
+    font-size: 12px;
+    color: #8892b0;
+    font-weight: 400;
+  }
+
+  .pnl-badge {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  .pnl-positive {
+    background: rgba(72, 199, 142, 0.15);
+    color: #48c78e;
+    border: 1px solid rgba(72, 199, 142, 0.3);
+  }
+
+  .pnl-negative {
+    background: rgba(241, 70, 104, 0.15);
+    color: #f14668;
+    border: 1px solid rgba(241, 70, 104, 0.3);
+  }
+
+  /* ── Signal Badge ─────────────────────────────────── */
+  .signal-row {
+    margin-top: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .signal-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .signal-hold-confidently {
+    background: rgba(72, 199, 142, 0.15);
+    color: #48c78e;
+    border: 1px solid rgba(72, 199, 142, 0.35);
+  }
+
+  .signal-hold-caution {
+    background: rgba(255, 183, 77, 0.15);
+    color: #ffb74d;
+    border: 1px solid rgba(255, 183, 77, 0.35);
+  }
+
+  .signal-watch-closely {
+    background: rgba(255, 138, 76, 0.15);
+    color: #ff8a4c;
+    border: 1px solid rgba(255, 138, 76, 0.35);
+  }
+
+  .signal-review-position {
+    background: rgba(241, 70, 104, 0.15);
+    color: #f14668;
+    border: 1px solid rgba(241, 70, 104, 0.35);
+  }
+
+  .signal-reason {
+    font-size: 13px;
+    color: #a0aec0;
+    margin: 0;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  /* ── Card Body ────────────────────────────────────── */
+  .card-body {
+    padding: 20px 24px;
+  }
+
+  .content-block {
+    margin-bottom: 16px;
+  }
+
+  .content-block:last-child {
+    margin-bottom: 0;
+  }
+
+  .block-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #4c9be8;
+    margin: 0 0 6px 0;
+  }
+
+  .block-text {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #c0caf5;
+    margin: 0;
+  }
+
+  /* ── Earnings Highlight ───────────────────────────── */
+  .earnings-block {
+    background: rgba(99, 179, 237, 0.07);
+    border: 1px solid rgba(99, 179, 237, 0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+
+  .earnings-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .earnings-pill {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    background: rgba(99,179,237,0.2);
+    color: #63b3ed;
+    border: 1px solid rgba(99,179,237,0.4);
+    padding: 2px 10px;
+    border-radius: 20px;
+    display: inline-block;
+  }
+
+  .earnings-headline {
+    font-size: 12px;
+    color: #8892b0;
+    margin: 0;
+  }
+
+  .earnings-text {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: #c0caf5;
+    margin: 0;
+  }
+
+  /* ── Flags ────────────────────────────────────────── */
+  .flags-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .flags-list li {
+    font-size: 13px;
+    color: #a0aec0;
+    padding: 4px 0 4px 16px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .flags-list li::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    color: #4c9be8;
+    font-weight: 700;
+  }
+
+  /* ── LLM Error Banner ─────────────────────────────── */
+  .error-banner {
+    margin: 16px 24px;
+    background: rgba(241, 70, 104, 0.1);
+    border: 1px solid rgba(241, 70, 104, 0.3);
+    border-radius: 8px;
+    padding: 16px 20px;
+  }
+
+  .error-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f14668;
+    margin: 0 0 8px 0;
+  }
+
+  .error-text {
+    font-size: 12px;
+    color: #a0aec0;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  /* ── Module Status ────────────────────────────────── */
+  .run-summary {
+    margin: 16px 24px 0 24px;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .run-summary-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #8892b0;
+    margin: 0 0 8px 0;
+  }
+
+  .module-ok { color: #48c78e; }
+  .module-fail { color: #f14668; }
+
+  .run-meta {
+    font-size: 11px;
+    color: #565f89;
+    margin: 0;
+  }
+
+  /* ── Footer ───────────────────────────────────────── */
+  .footer {
+    padding: 24px 40px 32px 40px;
+    text-align: center;
+  }
+
+  .footer-text {
+    font-size: 11px;
+    color: #4a5568;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .footer-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    margin: 20px 0;
+  }
+
+  /* ── Responsive ───────────────────────────────────── */
+  @media only screen and (max-width: 600px) {
+    .email-container { width: 100% !important; }
+    .header { padding: 28px 24px 24px 24px !important; }
+    .holding-card { margin: 0 12px 16px 12px !important; }
+    .card-header, .card-body { padding: 16px !important; }
+    .stats-row { display: block !important; }
+    .stat-cell {
+      display: block !important;
+      width: 100% !important;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+    .header-title { font-size: 22px !important; }
+    .summary-section { padding: 20px 24px !important; }
+    .section-header { padding: 20px 24px 10px 24px !important; }
+    .footer { padding: 20px 24px !important; }
+  }
+</style>
+</head>
+<body>
+<div class="email-wrapper">
+<div class="email-container">
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
+  <div class="header">
+    <div class="header-label">&#x1F4CA; Weekly Digest</div>
+    <h1 class="header-title">Portfolio Report</h1>
+    <p class="header-subtitle">Week ending {{ week_ending }} &nbsp;&middot;&nbsp; Generated {{ generated_at }}</p>
+
+    <!-- Stats Row -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td width="32%" style="padding: 14px 8px 14px 0;">
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+            <span style="font-size: 24px; font-weight: 800; color: #fff; display: block;">{{ digest.holdings|length }}</span>
+            <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Holdings</span>
+          </div>
+        </td>
+        <td width="4%"></td>
+        <td width="32%" style="padding: 14px 4px;">
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+            {% set earnings_count = digest.holdings | selectattr('has_earnings', 'equalto', true) | list | length %}
+            <span style="font-size: 24px; font-weight: 800; color: {% if earnings_count > 0 %}#63b3ed{% else %}#fff{% endif %}; display: block;">{{ earnings_count }}</span>
+            <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Earnings This Week</span>
+          </div>
+        </td>
+        <td width="4%"></td>
+        <td width="32%" style="padding: 14px 0 14px 8px;">
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+            {% set confident_count = digest.holdings | selectattr('signal', 'equalto', 'HOLD CONFIDENTLY') | list | length %}
+            {% set review_count = digest.holdings | selectattr('signal', 'equalto', 'REVIEW POSITION') | list | length %}
+            <span style="font-size: 24px; font-weight: 800; color: {% if review_count > 0 %}#f14668{% elif confident_count == digest.holdings|length %}#48c78e{% else %}#ffb74d{% endif %}; display: block;">
+              {% if review_count > 0 %}{{ review_count }} &#x26A0;{% elif confident_count == digest.holdings|length %}All &#x2713;{% else %}{{ confident_count }}/{{ digest.holdings|length }}{% endif %}
+            </span>
+            <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Confident Holds</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═════════════════ PORTFOLIO SUMMARY ════════════════ -->
+  <div class="summary-section">
+    <p class="section-label">&#x1F4DD; Portfolio Overview</p>
+    <p class="summary-text">{{ digest.portfolio_summary }}</p>
+  </div>
+
+  <!-- ═════════════════ LLM ERROR BANNER ════════════════ -->
+  {% if not llm_ok %}
+  <div class="error-banner">
+    <p class="error-title">&#x26A0;&#xFE0F; LLM Synthesis Unavailable</p>
+    <p class="error-text">The AI synthesis step failed this week. Raw output below:</p>
+    <pre class="error-text" style="margin-top: 10px; font-size: 11px;">{{ raw_llm_response[:2000] }}</pre>
+  </div>
+  {% endif %}
+
+  <!-- ════════════════ HOLDINGS SECTION ══════════════════ -->
+  {% if digest.holdings %}
+  <div class="section-header">
+    <p class="section-title">Holdings Analysis</p>
+  </div>
+
+  {% for holding in digest.holdings %}
+  <div class="holding-card">
+
+    <!-- Card Header — Company + Signal -->
+    <div class="card-header">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td>
+            <p class="company-name">
+              {{ holding.company_name }}
+              <span class="company-symbol">&nbsp;{{ holding.symbol }}</span>
+            </p>
+          </td>
+        </tr>
+      </table>
+
+      <!-- Signal Row -->
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 12px;">
+        <tr>
+          <td style="vertical-align: top; padding-right: 12px;" width="1%">
+            {% set sig = holding.signal | upper %}
+            {% if sig == 'HOLD CONFIDENTLY' %}
+              <span class="signal-badge signal-hold-confidently">&#x2714; Hold Confidently</span>
+            {% elif sig == 'HOLD WITH CAUTION' %}
+              <span class="signal-badge signal-hold-caution">&#x26A0; Hold with Caution</span>
+            {% elif sig == 'WATCH CLOSELY' %}
+              <span class="signal-badge signal-watch-closely">&#x1F441; Watch Closely</span>
+            {% elif sig == 'REVIEW POSITION' %}
+              <span class="signal-badge signal-review-position">&#x26D4; Review Position</span>
+            {% else %}
+              <span class="signal-badge signal-hold-caution">{{ holding.signal }}</span>
+            {% endif %}
+          </td>
+          <td style="vertical-align: top;">
+            <p class="signal-reason">{{ holding.signal_reason }}</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Card Body -->
+    <div class="card-body">
+
+      <!-- Earnings Block (only if has_earnings) -->
+      {% if holding.has_earnings %}
+      <div class="earnings-block">
+        <div style="margin-bottom: 8px;">
+          <span class="earnings-pill">&#x1F4CA; Quarterly Results</span>
+          {% if holding.earnings_headline %}
+          <span style="font-size: 11px; color: #8892b0; margin-left: 8px;">{{ holding.earnings_headline }}</span>
+          {% endif %}
+        </div>
+        {% if holding.earnings_summary %}
+        <p class="earnings-text">{{ holding.earnings_summary }}</p>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      <!-- News Summary -->
+      {% if holding.news_summary %}
+      <div class="content-block">
+        <p class="block-label">&#x1F4F0; This Week's News</p>
+        <p class="block-text">{{ holding.news_summary }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Industry Insight -->
+      {% if holding.industry_insight %}
+      <div class="content-block">
+        <p class="block-label">&#x1F30D; Sector Pulse</p>
+        <p class="block-text">{{ holding.industry_insight }}</p>
+      </div>
+      {% endif %}
+
+      <!-- Flags -->
+      {% if holding.flags %}
+      <div class="content-block">
+        <p class="block-label">&#x1F6A9; Watch For</p>
+        <ul class="flags-list">
+          {% for flag in holding.flags %}
+          <li>{{ flag }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+    </div><!-- /card-body -->
+  </div><!-- /holding-card -->
+  {% endfor %}
+  {% endif %}
+
+  <!-- ══════════════════ RUN SUMMARY ═════════════════════ -->
+  <div class="run-summary">
+    <p class="run-summary-title">Pipeline Status</p>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td>
+          {% for mod in run_summary.get('modules_ok', []) %}
+          <span class="module-ok" style="font-size: 11px; margin-right: 12px;">&#x2714; {{ mod }}</span>
+          {% endfor %}
+          {% for mod in run_summary.get('modules_failed', []) %}
+          <span class="module-fail" style="font-size: 11px; margin-right: 12px;">&#x2717; {{ mod }}</span>
+          {% endfor %}
+        </td>
+      </tr>
+    </table>
+    <p class="run-meta" style="margin-top: 8px;">
+      {{ run_summary.get('total_queries', 0) }} search queries &nbsp;&middot;&nbsp;
+      {{ run_summary.get('run_duration_sec', 0) }}s run time &nbsp;&middot;&nbsp;
+      LLM: {{ digest.get('_llm_model', 'N/A') }}
+    </p>
+  </div>
+
+  <!-- ════════════════════ FOOTER ═════════════════════════ -->
+  <div class="footer">
+    <hr class="footer-divider">
+    <p class="footer-text">
+      <strong style="color: #565f89;">Holdings Report Agent</strong> &nbsp;&middot;&nbsp; Phase 1<br>
+      Data sources: Upstox API &middot; BSE Corporate Announcements &middot; Brave Search<br>
+      Analysis by Google Gemini &middot; Prices as of market close<br><br>
+      <span style="color: #3d4463;">This report is for personal informational use only.<br>
+      Not financial advice. Always do your own research.</span>
+    </p>
+  </div>
+
+</div><!-- /email-container -->
+</div><!-- /email-wrapper -->
+</body>
+</html>

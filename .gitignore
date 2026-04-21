@@ -1,0 +1,26 @@
+# === SECRETS — NEVER COMMIT ===
+.env
+
+# === RUNTIME DATA ===
+data/
+logs/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# === VENV ===
+venv/
+.venv/
+env/
+
+# === EDITOR ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS ===
+.DS_Store
+Thumbs.db

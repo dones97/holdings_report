@@ -1,0 +1,89 @@
+# =============================================================
+# Weekly Portfolio Digest — GitHub Actions Workflow
+#
+# Schedule: Every Sunday at 12:30 UTC = 18:00 IST
+# Trigger:  Also runnable manually from the Actions tab
+#
+# Secrets required (set in repo Settings → Secrets → Actions):
+#   UPSTOX_CLIENT_ID, UPSTOX_CLIENT_SECRET
+#   UPSTOX_MOBILE, UPSTOX_PIN, UPSTOX_TOTP_SECRET
+#   GOOGLE_API_KEY, BRAVE_SEARCH_API_KEY
+#   GMAIL_ADDRESS, GMAIL_APP_PASSWORD, RECIPIENT_EMAIL
+# =============================================================
+
+name: Weekly Portfolio Digest
+
+on:
+  schedule:
+    # Every Sunday at 12:30 UTC = 18:00 IST
+    - cron: '30 12 * * 0'
+  workflow_dispatch:
+    # Allow manual trigger from the GitHub Actions tab anytime
+    inputs:
+      mode:
+        description: 'Run mode'
+        required: false
+        default: 'scheduled'
+        type: choice
+        options:
+          - scheduled
+          - test
+
+jobs:
+  send-digest:
+    name: Run Portfolio Digest Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # ── Inject all secrets as environment variables ───────────────────────────
+    # Python's os.getenv() picks these up even without a .env file present.
+    env:
+      UPSTOX_CLIENT_ID: ${{ secrets.UPSTOX_CLIENT_ID }}
+      UPSTOX_CLIENT_SECRET: ${{ secrets.UPSTOX_CLIENT_SECRET }}
+      UPSTOX_REDIRECT_URI: http://127.0.0.1
+      UPSTOX_MOBILE: ${{ secrets.UPSTOX_MOBILE }}
+      UPSTOX_PIN: ${{ secrets.UPSTOX_PIN }}
+      UPSTOX_TOTP_SECRET: ${{ secrets.UPSTOX_TOTP_SECRET }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
+      GMAIL_ADDRESS: ${{ secrets.GMAIL_ADDRESS }}
+      GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+      RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+
+    steps:
+      # ── 1. Get the code ─────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Python setup ──────────────────────────────────────────────────────
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      # ── 3. Install dependencies ──────────────────────────────────────────────
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # ── 4. Create runtime directories (gitignored, so not in repo) ──────────
+      - name: Create runtime directories
+        run: mkdir -p data/news data/earnings logs
+
+      # ── 5. Run the pipeline ──────────────────────────────────────────────────
+      - name: Run digest pipeline
+        run: python main.py --scheduled
+
+      # ── 6. Upload logs as artifact (available for 30 days) ──────────────────
+      - name: Upload pipeline log
+        if: always()   # Upload even if pipeline step failed
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-log-${{ github.run_number }}
+          path: logs/pipeline.log
+          retention-days: 30
+
+      # ── 7. Alert on failure ──────────────────────────────────────────────────
+      # If the pipeline exits with an error, GitHub will mark the run as failed
+      # and send you a notification email (configured in GitHub notification settings).
+      # The digest email also includes a module status section showing what failed.

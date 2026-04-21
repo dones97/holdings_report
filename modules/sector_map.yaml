@@ -1,0 +1,246 @@
+# =============================================================
+# Sector Map — Symbol/ISIN to Sector + BSE Code
+# Add your holdings here before first run.
+# The setup script will help populate this automatically.
+# =============================================================
+
+# Format:
+#   NSE_SYMBOL:
+#     sector: "Sector Name"
+#     bse_code: "500000"       # BSE scrip code (6 digits)
+#     company_name: "Full Company Name"
+
+RELIANCE:
+  sector: "Energy & Petrochemicals"
+  bse_code: "500325"
+  company_name: "Reliance Industries Ltd"
+
+TCS:
+  sector: "Information Technology"
+  bse_code: "532540"
+  company_name: "Tata Consultancy Services Ltd"
+
+INFY:
+  sector: "Information Technology"
+  bse_code: "500209"
+  company_name: "Infosys Ltd"
+
+HDFCBANK:
+  sector: "Banking & Financial Services"
+  bse_code: "500180"
+  company_name: "HDFC Bank Ltd"
+
+ICICIBANK:
+  sector: "Banking & Financial Services"
+  bse_code: "532174"
+  company_name: "ICICI Bank Ltd"
+
+SBIN:
+  sector: "Banking & Financial Services"
+  bse_code: "500112"
+  company_name: "State Bank of India"
+
+HINDUNILVR:
+  sector: "FMCG"
+  bse_code: "500696"
+  company_name: "Hindustan Unilever Ltd"
+
+BHARTIARTL:
+  sector: "Telecommunications"
+  bse_code: "532454"
+  company_name: "Bharti Airtel Ltd"
+
+ITC:
+  sector: "FMCG"
+  bse_code: "500875"
+  company_name: "ITC Ltd"
+
+LT:
+  sector: "Infrastructure & Capital Goods"
+  bse_code: "500510"
+  company_name: "Larsen & Toubro Ltd"
+
+WIPRO:
+  sector: "Information Technology"
+  bse_code: "507685"
+  company_name: "Wipro Ltd"
+
+HCLTECH:
+  sector: "Information Technology"
+  bse_code: "532281"
+  company_name: "HCL Technologies Ltd"
+
+AXISBANK:
+  sector: "Banking & Financial Services"
+  bse_code: "532215"
+  company_name: "Axis Bank Ltd"
+
+BAJFINANCE:
+  sector: "Banking & Financial Services"
+  bse_code: "500034"
+  company_name: "Bajaj Finance Ltd"
+
+KOTAKBANK:
+  sector: "Banking & Financial Services"
+  bse_code: "500247"
+  company_name: "Kotak Mahindra Bank Ltd"
+
+MARUTI:
+  sector: "Automobiles"
+  bse_code: "532500"
+  company_name: "Maruti Suzuki India Ltd"
+
+TATAMOTORS:
+  sector: "Automobiles"
+  bse_code: "500570"
+  company_name: "Tata Motors Ltd"
+
+SUNPHARMA:
+  sector: "Pharmaceuticals"
+  bse_code: "524715"
+  company_name: "Sun Pharmaceutical Industries Ltd"
+
+DRREDDY:
+  sector: "Pharmaceuticals"
+  bse_code: "500124"
+  company_name: "Dr Reddy's Laboratories Ltd"
+
+ONGC:
+  sector: "Energy & Petrochemicals"
+  bse_code: "500312"
+  company_name: "Oil and Natural Gas Corporation Ltd"
+
+NTPC:
+  sector: "Energy & Utilities"
+  bse_code: "532555"
+  company_name: "NTPC Ltd"
+
+POWERGRID:
+  sector: "Energy & Utilities"
+  bse_code: "532898"
+  company_name: "Power Grid Corporation of India Ltd"
+
+ADANIENT:
+  sector: "Infrastructure & Capital Goods"
+  bse_code: "512599"
+  company_name: "Adani Enterprises Ltd"
+
+ADANIPORTS:
+  sector: "Infrastructure & Capital Goods"
+  bse_code: "532921"
+  company_name: "Adani Ports and Special Economic Zone Ltd"
+
+TATASTEEL:
+  sector: "Metals & Mining"
+  bse_code: "500470"
+  company_name: "Tata Steel Ltd"
+
+JSWSTEEL:
+  sector: "Metals & Mining"
+  bse_code: "500228"
+  company_name: "JSW Steel Ltd"
+
+TITAN:
+  sector: "Consumer Discretionary"
+  bse_code: "500114"
+  company_name: "Titan Company Ltd"
+
+ASIANPAINT:
+  sector: "Consumer Discretionary"
+  bse_code: "500820"
+  company_name: "Asian Paints Ltd"
+
+NESTLEIND:
+  sector: "FMCG"
+  bse_code: "500790"
+  company_name: "Nestle India Ltd"
+
+ULTRACEMCO:
+  sector: "Construction Materials"
+  bse_code: "532538"
+  company_name: "UltraTech Cement Ltd"
+
+M&M:
+  sector: "Automobiles"
+  bse_code: "500520"
+  company_name: "Mahindra & Mahindra Ltd"
+
+GRASIM:
+  sector: "Construction Materials"
+  bse_code: "500300"
+  company_name: "Grasim Industries Ltd"
+
+CIPLA:
+  sector: "Pharmaceuticals"
+  bse_code: "500087"
+  company_name: "Cipla Ltd"
+
+TECHM:
+  sector: "Information Technology"
+  bse_code: "532755"
+  company_name: "Tech Mahindra Ltd"
+
+INDUSINDBK:
+  sector: "Banking & Financial Services"
+  bse_code: "532187"
+  company_name: "IndusInd Bank Ltd"
+
+HINDALCO:
+  sector: "Metals & Mining"
+  bse_code: "500440"
+  company_name: "Hindalco Industries Ltd"
+
+VEDL:
+  sector: "Metals & Mining"
+  bse_code: "500295"
+  company_name: "Vedanta Ltd"
+
+DIVISLAB:
+  sector: "Pharmaceuticals"
+  bse_code: "532488"
+  company_name: "Divi's Laboratories Ltd"
+
+BAJAJFINSV:
+  sector: "Banking & Financial Services"
+  bse_code: "532978"
+  company_name: "Bajaj Finserv Ltd"
+
+EICHERMOT:
+  sector: "Automobiles"
+  bse_code: "505200"
+  company_name: "Eicher Motors Ltd"
+
+ZOMATO:
+  sector: "Consumer Internet"
+  bse_code: "543320"
+  company_name: "Zomato Ltd"
+
+PAYTM:
+  sector: "Fintech"
+  bse_code: "543396"
+  company_name: "One97 Communications Ltd (Paytm)"
+
+NYKAA:
+  sector: "Consumer Internet"
+  bse_code: "543384"
+  company_name: "FSN E-Commerce Ventures Ltd (Nykaa)"
+
+POLICYBZR:
+  sector: "Fintech"
+  bse_code: "543390"
+  company_name: "PB Fintech Ltd (PolicyBazaar)"
+
+IRCTC:
+  sector: "Consumer Internet"
+  bse_code: "542830"
+  company_name: "Indian Railway Catering and Tourism Corporation Ltd"
+
+HAL:
+  sector: "Defence & Aerospace"
+  bse_code: "541154"
+  company_name: "Hindustan Aeronautics Ltd"
+
+BEL:
+  sector: "Defence & Aerospace"
+  bse_code: "500049"
+  company_name: "Bharat Electronics Ltd"

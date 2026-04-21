@@ -1,0 +1,58 @@
+# =============================================================
+# Holdings Report Agent — Configuration
+# Non-secret settings. Safe to commit.
+# =============================================================
+
+# --- Pipeline Schedule ---
+schedule:
+  day_of_week: sunday          # Run every Sunday
+  time_ist: "18:00"            # 6:00 PM IST
+  token_refresh_time_ist: "17:45"  # Refresh token 15 min before pipeline
+
+# --- LLM Settings ---
+llm:
+  provider: gemini             # Options: gemini, openai, anthropic
+  model: gemini-2.5-flash      # Free tier model
+  temperature: 0.3
+  max_output_tokens: 4096
+  retry_attempts: 3
+  retry_delay_seconds: 10
+
+# --- News Enrichment ---
+news:
+  queries_per_holding: 2       # 2 queries: news + analyst
+  articles_per_query: 3        # Top 3 articles per query
+  sector_queries: 1            # 1 broader sector query per unique sector
+  lookback_days: 7             # Past 7 days only
+  max_queries_per_run: 60      # Safety cap (well within 2000/month free tier)
+
+# --- Earnings Detection ---
+earnings:
+  lookback_days: 7
+  keywords:
+    - "Financial Results"
+    - "Quarterly Results"
+    - "Annual Results"
+    - "Unaudited Financial Results"
+
+# --- Email Settings ---
+email:
+  sender_name: "Portfolio Digest"
+  subject_template: "Portfolio Digest — Week of {date} | {count} holdings reviewed"
+  smtp_host: smtp.gmail.com
+  smtp_port: 587
+
+# --- Data ---
+data:
+  holdings_file: data/holdings.json
+  news_dir: data/news
+  earnings_dir: data/earnings
+  log_file: logs/pipeline.log
+  log_max_bytes: 5242880       # 5 MB
+  log_backup_count: 4          # Keep 4 weekly backups
+
+# --- Upstox ---
+upstox:
+  base_url: https://api.upstox.com
+  holdings_endpoint: /v2/portfolio/long-term-holdings
+  redirect_uri: http://127.0.0.1
