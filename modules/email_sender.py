@@ -164,6 +164,9 @@ if __name__ == "__main__":
         "modules_failed": [],
         "total_queries": 28,
         "run_duration_sec": 87,
+        "weekly_abs_gain": 69020.5,
+        "weekly_pct_gain": 4.31,
+        "nifty_pct_gain": 3.37,
     }
 
     send_digest(mock_digest, mock_run_summary)

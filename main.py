@@ -33,7 +33,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR / ".env")
 
-from modules import upstox, earnings, news, llm, email_sender  # noqa: E402
+from modules import upstox, earnings, news, llm, email_sender, returns  # noqa: E402
 
 # ── Logging Setup ─────────────────────────────────────────────────────────────
 LOG_DIR = BASE_DIR / "logs"
@@ -114,6 +114,13 @@ def run_pipeline() -> dict:
         )
         _send_email_safe(digest, run_summary, start_time)
         return run_summary
+
+    # ── Step 1.5: Calculate Weekly Returns ────────────────────────────────────
+    try:
+        weekly_returns = returns.get_weekly_returns(holdings)
+        run_summary.update(weekly_returns)
+    except Exception as e:
+        logger.error("Failed to calculate weekly returns: %s", str(e))
 
     # ── Step 2: Earnings Detection ────────────────────────────────────────────
     logger.info("=" * 60)

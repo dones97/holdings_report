@@ -441,7 +441,7 @@
     <p class="header-subtitle">Week ending {{ week_ending }} &nbsp;&middot;&nbsp; Generated {{ generated_at }}</p>
 
     <!-- Stats Row -->
-    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 12px;">
       <tr>
         <td width="32%" style="padding: 14px 8px 14px 0;">
           <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
@@ -470,6 +470,40 @@
         </td>
       </tr>
     </table>
+
+    <!-- Performance Row -->
+    {% if "weekly_abs_gain" in run_summary %}
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td width="32%" style="padding: 14px 8px 14px 0;">
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+            <span style="font-size: 24px; font-weight: 800; color: {% if run_summary.weekly_pct_gain >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
+              {% if run_summary.weekly_pct_gain > 0 %}+{% endif %}{{ run_summary.weekly_pct_gain }}%
+            </span>
+            <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Portfolio (7D)</span>
+          </div>
+        </td>
+        <td width="4%"></td>
+        <td width="32%" style="padding: 14px 4px;">
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+             <span style="font-size: 24px; font-weight: 800; color: {% if run_summary.nifty_pct_gain >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
+              {% if run_summary.nifty_pct_gain > 0 %}+{% endif %}{{ run_summary.nifty_pct_gain }}%
+            </span>
+            <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Nifty 50 (7D)</span>
+          </div>
+        </td>
+        <td width="4%"></td>
+        <td width="32%" style="padding: 14px 0 14px 8px;">
+          <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
+            <span style="font-size: 19px; font-weight: 800; color: {% if run_summary.weekly_abs_gain >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
+              {% if run_summary.weekly_abs_gain > 0 %}+{% endif %}Rs.{{ "{:,.0f}".format(run_summary.weekly_abs_gain | abs) }}
+            </span>
+            <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Value Gain (7D)</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+    {% endif %}
   </div>
 
   <!-- ═════════════════ PORTFOLIO SUMMARY ════════════════ -->
