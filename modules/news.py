@@ -219,6 +219,7 @@ def _fetch_holding_news(holding: dict, api_key: str) -> dict:
         discovered_sector, discovery_articles = _discover_sector(company, symbol, api_key)
         if discovered_sector != "Unknown":
             holding["sector"] = discovered_sector
+            holding["_newly_discovered_sector"] = True
             sector = discovered_sector
             logger.info("%s: discovered sector = %s", symbol, discovered_sector)
         add_articles(discovery_articles)
@@ -335,6 +336,23 @@ def fetch_news(holdings: list[dict]) -> tuple[list[dict], dict[str, list[dict]]]
         "News enrichment complete: %d holdings, %d total articles, %d sectors covered",
         len(enriched), total_articles, len(sector_news),
     )
+
+    # ── Auto-persist newly discovered sectors to sector_map.yaml ─────────────
+    newly_discovered = [h for h in enriched if h.pop("_newly_discovered_sector", False)]
+    if newly_discovered:
+        sector_map_path = BASE_DIR / "modules" / "sector_map.yaml"
+        try:
+            with open(sector_map_path, "a", encoding="utf-8") as f:
+                f.write("\n# Auto-discovered by News Module\n")
+                for h in newly_discovered:
+                    f.write(f"{h['symbol']}:\n")
+                    f.write(f"  sector: \"{h['sector']}\"\n")
+                    f.write(f"  bse_code: \"\"\n")
+                    f.write(f"  company_name: \"{h['company_name']}\"\n\n")
+            logger.info("Saved %d newly discovered sectors to sector_map.yaml", len(newly_discovered))
+        except Exception as e:
+            logger.error("Failed to update sector_map.yaml: %s", e)
+
     return enriched, sector_news
 
 
