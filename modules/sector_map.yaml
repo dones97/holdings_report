@@ -244,3 +244,110 @@ BEL:
   sector: "Defence & Aerospace"
   bse_code: "500049"
   company_name: "Bharat Electronics Ltd"
+
+# ── YOUR ACTUAL PORTFOLIO HOLDINGS ──────────────────────────────────────────
+
+DSSL:
+  sector: "Information Technology"
+  bse_code: "532584"
+  company_name: "Dynacons Systems & Solutions Ltd"
+
+JYOTIRES:
+  sector: "Chemicals & Adhesives"
+  bse_code: "530129"
+  company_name: "Jyoti Resins & Adhesives Ltd"
+
+DPABHUSHAN:
+  sector: "Jewellery & Consumer Discretionary"
+  bse_code: "543373"
+  company_name: "D.P. Abhushan Ltd"
+
+GOKULAGRO:
+  sector: "Agriculture & Food Processing"
+  bse_code: "524226"
+  company_name: "Gokul Agro Resources Ltd"
+
+FRONTSP:
+  sector: "Automotive Components"
+  bse_code: "505924"
+  company_name: "Frontier Springs Ltd"
+
+TANFACIND:
+  sector: "Chemicals & Fluorine"
+  bse_code: "506854"
+  company_name: "Tanfac Industries Ltd"
+
+ONEGLOBAL:
+  sector: "Information Technology & Services"
+  bse_code: "543804"
+  company_name: "One Global Service Provider Ltd"
+
+FIEMIND:
+  sector: "Automotive Components"
+  bse_code: "532768"
+  company_name: "Fiem Industries Ltd"
+
+AMAL:
+  sector: "Chemicals"
+  bse_code: "506597"
+  company_name: "Amal Ltd"
+
+WAAREEENER:
+  sector: "Renewable Energy & Solar"
+  bse_code: "544400"
+  company_name: "Waaree Energies Ltd"
+
+NATIONALUM:
+  sector: "Metals & Mining"
+  bse_code: "532234"
+  company_name: "National Aluminium Company Ltd"
+
+MAZDOCK:
+  sector: "Defence & Shipbuilding"
+  bse_code: "543237"
+  company_name: "Mazagon Dock Shipbuilders Ltd"
+
+COROMANDEL:
+  sector: "Agrochemicals & Fertilisers"
+  bse_code: "506395"
+  company_name: "Coromandel International Ltd"
+
+AIIL:
+  sector: "Banking & Financial Services"
+  bse_code: "543910"
+  company_name: "Authum Investment & Infrastructure Ltd"
+
+ARYAMAN:
+  sector: "Banking & Financial Services"
+  bse_code: "531179"
+  company_name: "Aryaman Financial Services Ltd"
+
+NDRAUTO:
+  sector: "Automotive Components"
+  bse_code: "543929"
+  company_name: "NDR Auto Components Ltd"
+
+SRM:
+  sector: "Infrastructure & Construction"
+  bse_code: "543945"
+  company_name: "SRM Contractors Ltd"
+
+SHILCTECH:
+  sector: "Electrical Equipment & Transformers"
+  bse_code: "531456"
+  company_name: "Shilchar Technologies Ltd"
+
+SIGMA:
+  sector: "Information Technology"
+  bse_code: "543973"
+  company_name: "Sigma Solve Ltd"
+
+KMEW:
+  sector: "Marine Services & Logistics"
+  bse_code: "543904"
+  company_name: "Knowledge Marine & Engineering Works Ltd"
+
+TI:
+  sector: "FMCG & Spirits"
+  bse_code: "507515"
+  company_name: "Tilaknagar Industries Ltd"

@@ -5,3 +5,5 @@ python-dotenv>=1.0.0
 pyyaml>=6.0.0
 pyotp>=2.9.0
 schedule>=1.2.0
+playwright>=1.40.0
+upstox>=2.0.3

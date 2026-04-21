@@ -132,7 +132,7 @@ def run_mock():
 
     logger.info("Step 2/2: Sending test email...")
     email_sender.send_digest(digest, run_summary)
-    logger.info("✅ Test email sent! Check your inbox.")
+    logger.info("SUCCESS: Test email sent! Check your inbox.")
 
 
 def run_full():
@@ -177,7 +177,7 @@ def run_email_only():
         "run_duration_sec": 0,
     }
     email_sender.send_digest(digest, run_summary)
-    logger.info("✅ Email re-sent from cached data.")
+    logger.info("SUCCESS: Email re-sent from cached data.")
 
 
 def main():

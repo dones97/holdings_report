@@ -103,13 +103,13 @@ def run_pipeline() -> dict:
         if not holdings:
             raise ValueError("Upstox returned empty holdings list")
         run_summary["modules_ok"].append("upstox")
-        logger.info("✓ Holdings: %d positions fetched", len(holdings))
+        logger.info("OK Holdings: %d positions fetched", len(holdings))
     except Exception as e:
         run_summary["modules_failed"].append("upstox")
-        logger.error("✗ Upstox FAILED: %s", str(e))
+        logger.error("FAIL Upstox FAILED: %s", str(e))
         # Cannot continue without holdings — send failure email
         digest["portfolio_summary"] = (
-            f"⚠️ Pipeline failed at Step 1 (Holdings fetch): {str(e)[:200]}. "
+            f"WARNING Pipeline failed at Step 1 (Holdings fetch): {str(e)[:200]}. "
             "No report could be generated this week. Check logs/pipeline.log for details."
         )
         _send_email_safe(digest, run_summary, start_time)
@@ -123,10 +123,10 @@ def run_pipeline() -> dict:
         holdings = earnings.detect_earnings(holdings)
         earnings_count = sum(1 for h in holdings if h.get("has_earnings"))
         run_summary["modules_ok"].append("earnings")
-        logger.info("✓ Earnings: %d/%d holdings have recent results", earnings_count, len(holdings))
+        logger.info("OK Earnings: %d/%d holdings have recent results", earnings_count, len(holdings))
     except Exception as e:
         run_summary["modules_failed"].append("earnings")
-        logger.error("✗ Earnings detection FAILED: %s — continuing without earnings data", str(e))
+        logger.error("FAIL Earnings detection FAILED: %s — continuing without earnings data", str(e))
         # Non-fatal — mark all holdings as no_earnings and continue
         for h in holdings:
             h.setdefault("has_earnings", False)
@@ -142,12 +142,12 @@ def run_pipeline() -> dict:
         run_summary["modules_ok"].append("news")
         run_summary["total_queries"] = len(holdings) * 2 + len(sector_news_data)
         logger.info(
-            "✓ News: %d articles across %d holdings, %d sector summaries",
+            "OK News: %d articles across %d holdings, %d sector summaries",
             total_articles, len(holdings), len(sector_news_data)
         )
     except Exception as e:
         run_summary["modules_failed"].append("news")
-        logger.error("✗ News FAILED: %s — continuing without news data", str(e))
+        logger.error("FAIL News FAILED: %s — continuing without news data", str(e))
         for h in holdings:
             h.setdefault("news_articles", [])
 
@@ -159,13 +159,13 @@ def run_pipeline() -> dict:
         digest = llm.synthesise(holdings, sector_news_data)
         if digest.get("_llm_ok"):
             run_summary["modules_ok"].append("llm")
-            logger.info("✓ LLM: digest synthesised for %d holdings", len(digest.get("holdings", [])))
+            logger.info("OK LLM: digest synthesised for %d holdings", len(digest.get("holdings", [])))
         else:
             run_summary["modules_failed"].append("llm")
-            logger.warning("✗ LLM: synthesis failed — raw text fallback in email")
+            logger.warning("FAIL LLM: synthesis failed — raw text fallback in email")
     except Exception as e:
         run_summary["modules_failed"].append("llm")
-        logger.error("✗ LLM FAILED: %s", str(e))
+        logger.error("FAIL LLM FAILED: %s", str(e))
         digest["_raw_llm_response"] = str(e)
 
     # ── Step 5: Send Email ────────────────────────────────────────────────────
@@ -183,10 +183,10 @@ def _send_email_safe(digest: dict, run_summary: dict, start_time: float):
     try:
         email_sender.send_digest(digest, run_summary)
         run_summary["modules_ok"].append("email")
-        logger.info("✓ Email delivered successfully")
+        logger.info("OK Email delivered successfully")
     except Exception as e:
         run_summary["modules_failed"].append("email")
-        logger.error("✗ Email delivery FAILED: %s", str(e))
+        logger.error("FAIL Email delivery FAILED: %s", str(e))
         logger.error("  The digest was synthesised but could not be delivered.")
         logger.error("  Check GMAIL_ADDRESS and GMAIL_APP_PASSWORD in .env")
 

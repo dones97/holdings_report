@@ -1,5 +1,5 @@
 """
-email_sender.py — Email Rendering & Delivery Module
+email_sender.py - Email Rendering & Delivery Module
 
 Renders the LLM digest into a rich HTML email using Jinja2
 and delivers it via Gmail SMTP.
@@ -64,7 +64,7 @@ def _send_smtp(subject: str, html_body: str) -> bool:
 
     # Plain text fallback
     plain = (
-        f"Portfolio Digest — Week of {datetime.now().strftime('%d %b %Y')}\n\n"
+        f"Portfolio Digest - Week of {datetime.now().strftime('%d %b %Y')}\n\n"
         "This email requires an HTML-capable email client.\n"
         "Please view it in Gmail or Outlook."
     )
@@ -137,8 +137,8 @@ if __name__ == "__main__":
                 "company_name": "Tata Consultancy Services Ltd",
                 "signal": "HOLD WITH CAUTION",
                 "signal_reason": "Q3 results missed revenue estimates; management guidance cautious on near-term demand.",
-                "news_summary": "TCS reported Q3 FY25 revenue of ₹63,000 cr, up 4.5% YoY but below street estimates of ₹63,800 cr. Deal wins remain healthy at $8.1B TCV.",
-                "earnings_summary": "Revenue grew 4.5% YoY to ₹63,000 cr. PAT rose 5.5% to ₹12,200 cr. EBIT margin at 24.5%, flat QoQ. Headcount declined 2,300 reflecting weak hiring sentiment.",
+                "news_summary": "TCS reported Q3 FY25 revenue of Rs.63,000 cr, up 4.5% YoY but below street estimates of Rs.63,800 cr. Deal wins remain healthy at $8.1B TCV.",
+                "earnings_summary": "Revenue grew 4.5% YoY to Rs.63,000 cr. PAT rose 5.5% to Rs.12,200 cr. EBIT margin at 24.5%, flat QoQ. Headcount declined 2,300 reflecting weak hiring sentiment.",
                 "has_earnings": True,
                 "industry_insight": "Indian IT sector faces near-term pressure from US discretionary spend cuts. Large deals pipeline remains healthy for FY26.",
                 "flags": [

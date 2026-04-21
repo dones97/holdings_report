@@ -25,51 +25,62 @@ logger = logging.getLogger(__name__)
 # ── Model Configuration ───────────────────────────────────────────────────────
 MODEL_NAME = "gemini-2.5-flash"
 TEMPERATURE = 0.3
-MAX_OUTPUT_TOKENS = 8192
+MAX_OUTPUT_TOKENS = 16384
 RETRY_ATTEMPTS = 3
 RETRY_DELAY = 15  # seconds between retries
 
 # ── Prompt Templates ──────────────────────────────────────────────────────────
 
-SYSTEM_PROMPT = """You are a senior equity research analyst specialising in Indian stock markets (NSE/BSE).
-Your job is to review a portfolio of Indian stocks and produce a concise, insightful weekly digest.
+SYSTEM_PROMPT = """You are a senior equity research analyst at a Mumbai-based fund, specialising in Indian small-cap and mid-cap stocks (NSE/BSE).
+Your job is to produce an insightful, actionable weekly portfolio digest for a retail investor.
 
-Guidelines:
-- Be direct and factual. Avoid generic statements like "the market is uncertain."
-- Ground every observation in the data provided (news, earnings, sector signals).
-- When has_earnings is true, lead with an earnings breakdown before news.
-- Use Indian market context (Nifty, Sensex, RBI, SEBI, FII/DII flows where relevant).
-- Signals must be one of: HOLD CONFIDENTLY | HOLD WITH CAUTION | WATCH CLOSELY | REVIEW POSITION
-- HOLD CONFIDENTLY: strong fundamentals, positive momentum, no red flags
-- HOLD WITH CAUTION: mixed signals, wait-and-watch, no urgent action needed
-- WATCH CLOSELY: meaningful risk or uncertainty, monitor closely this week
-- REVIEW POSITION: significant negative development; consider whether thesis still holds
+Critical guidelines:
+- For each stock, combine the PROVIDED news/data with YOUR OWN knowledge about the company, its business model, competitive position, promoter background, and sector dynamics.
+- If news_article_count is low (0-3), lean more heavily on your knowledge. Never say "no information available" — always provide useful context.
+- Be direct and specific. Avoid generic statements like "the market is uncertain" or "results were in line."
+- When has_earnings is true, lead with concrete numbers: revenue, PAT, margins, YoY growth.
+- Always use Indian market context: Nifty/Sensex trends, RBI policy, FII/DII flows, rupee movement, commodity prices where relevant.
+- For small/mid-cap stocks, mention: promoter holdings, any pledging concerns, liquidity, and business moat if known.
+- Signals:
+    HOLD CONFIDENTLY   = strong fundamentals, positive momentum, thesis intact
+    HOLD WITH CAUTION  = mixed signals, no urgent action but watch carefully
+    WATCH CLOSELY      = meaningful risk or uncertainty, monitor this week
+    REVIEW POSITION    = significant negative development; re-examine investment thesis
 
-Output ONLY valid JSON matching the schema exactly. No markdown, no explanation, just the JSON object."""
+Output ONLY valid JSON. No markdown fences, no explanation outside the JSON."""
 
-USER_PROMPT_TEMPLATE = """Today is {today}. Analyse the following Indian equity portfolio.
+USER_PROMPT_TEMPLATE = """Today is {today}. Analyse this Indian equity portfolio and produce a weekly digest.
 
-PORTFOLIO DATA:
+PORTFOLIO DATA (each holding includes news fetched this week + your own knowledge fills gaps):
 {portfolio_json}
 
-SECTOR NEWS CONTEXT:
+SECTOR & MACRO CONTEXT:
 {sector_news_json}
 
-Return exactly this JSON structure (fill all fields, omit earnings_summary only if has_earnings is false):
+INSTRUCTIONS:
+1. For holdings with few or no news articles, draw on your knowledge of: the company's business, sector trends, recent quarterly results (if you know them), promoter track record, and any known risks.
+2. Cross-reference sector context above with individual holdings in that sector.
+3. Every field must be substantive — no placeholder text.
+4. flags must be SPECIFIC (e.g., "NALCO's aluminium realisations depend on LME prices — watch for global inventory builds" vs just "commodity risk").
+
+Return exactly this JSON (omit earnings_summary only if has_earnings is false AND you have no earnings knowledge):
 
 {{
   "week_ending": "{today}",
-  "portfolio_summary": "2-3 sentences of overall portfolio commentary. Be specific — mention sectors, macro themes, or key events from the data.",
+  "portfolio_summary": "3-4 sentences of overall portfolio commentary covering: (1) key theme across holdings this week, (2) macro backdrop relevant to this portfolio mix, (3) any holdings showing outsized moves or risks. Be specific — name stocks and sectors.",
   "holdings": [
     {{
       "symbol": "NSE_SYMBOL",
       "company_name": "Full Company Name",
       "signal": "HOLD CONFIDENTLY",
-      "signal_reason": "One crisp sentence explaining why this signal.",
-      "news_summary": "2-3 sentences covering the most important news this week. Be specific.",
-      "earnings_summary": "3-4 sentences on the quarterly results if has_earnings is true. Cover revenue, PAT, margins, management commentary. Omit this field entirely if has_earnings is false.",
-      "industry_insight": "1-2 sentences on sector tailwinds or headwinds relevant to this holding.",
-      "flags": ["Specific risk or catalyst to watch — be concrete, not generic"]
+      "signal_reason": "One crisp, specific sentence explaining this signal — cite a concrete data point.",
+      "news_summary": "2-4 sentences: prioritise the supplied news articles. If sparse, use your knowledge of recent developments, management statements, or sector news that would affect this stock. Always be specific.",
+      "earnings_summary": "3-4 sentences on the most recent quarterly results: revenue, PAT, EBITDA margin, YoY comparison, and one management commentary point. Include if you have this knowledge even if has_earnings is false in the data.",
+      "industry_insight": "2-3 sentences on sector tailwinds or headwinds. Mention specific factors: e.g., for solar — module price trends and domestic vs export mix; for defence — order book visibility and DRDO tech transfer progress.",
+      "flags": [
+        "Specific, concrete risk or catalyst — mention a number, name, or event where possible",
+        "Second flag if applicable"
+      ]
     }}
   ]
 }}"""
@@ -79,20 +90,25 @@ def _build_portfolio_context(holdings: list[dict]) -> str:
     """Build a compact JSON representation of holdings for the prompt."""
     context = []
     for h in holdings:
+        news_articles = h.get("news_articles", [])
         entry = {
             "symbol": h["symbol"],
             "company_name": h["company_name"],
             "sector": h.get("sector", "Unknown"),
             "pnl_pct": h.get("pnl_pct", 0),
+            "avg_price": h.get("avg_price", 0),
+            "current_price": h.get("current_price", 0),
             "has_earnings": h.get("has_earnings", False),
             "earnings_headline": h.get("earnings_headline"),
+            "news_article_count": len(news_articles),  # Tells LLM how much data we have
             "recent_news": [
                 {
                     "title": a.get("title", ""),
                     "description": a.get("description", ""),
                     "source": a.get("source", ""),
+                    "age_days": a.get("freshness_days", 7),
                 }
-                for a in h.get("news_articles", [])[:5]  # Cap at 5 articles per holding
+                for a in news_articles[:6]  # Up from 5 to 6
             ],
         }
         context.append(entry)
