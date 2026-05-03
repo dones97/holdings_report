@@ -122,6 +122,19 @@ def run_pipeline() -> dict:
     except Exception as e:
         logger.error("Failed to calculate weekly returns: %s", str(e))
 
+    # ── Step 1.6: Quantitative Analytics ──────────────────────────────────────
+    try:
+        from modules import analytics
+        logger.info("=" * 60)
+        logger.info("STEP 1.6: Enriching %d holdings with ML analytics (P/E & Factors)", len(holdings))
+        logger.info("=" * 60)
+        holdings = analytics.enrich_holdings(holdings)
+        run_summary["modules_ok"].append("analytics")
+        logger.info("OK Analytics enrichment completed")
+    except Exception as e:
+        run_summary["modules_failed"].append("analytics")
+        logger.error("Failed to fetch ML analytics: %s", str(e))
+
     # ── Step 2: Earnings Detection ────────────────────────────────────────────
     logger.info("=" * 60)
     logger.info("STEP 2/5: Detecting earnings (%d holdings)", len(holdings))

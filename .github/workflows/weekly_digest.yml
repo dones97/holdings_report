@@ -52,8 +52,20 @@ jobs:
 
     steps:
       # ── 1. Get the code ─────────────────────────────────────────────────────
-      - name: Checkout repository
+      - name: Checkout main repository
         uses: actions/checkout@v4
+
+      - name: Checkout factoranalysis repository
+        uses: actions/checkout@v4
+        with:
+          repository: dones97/factoranalysis
+          path: factoranalysis
+
+      - name: Checkout valuation repository
+        uses: actions/checkout@v4
+        with:
+          repository: dones97/valuation
+          path: Valuation
 
       # ── 2. Python setup ──────────────────────────────────────────────────────
       - name: Set up Python 3.11
@@ -64,7 +76,10 @@ jobs:
 
       # ── 3. Install dependencies ──────────────────────────────────────────────
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install -r factoranalysis/requirements.txt
+          pip install -r Valuation/requirements.txt
 
       - name: Install Playwright Browsers
         run: playwright install chromium

@@ -351,3 +351,25 @@ TI:
   sector: "FMCG & Spirits"
   bse_code: "507515"
   company_name: "Tilaknagar Industries Ltd"
+
+# Auto-discovered by News Module
+MANORAMA:
+  sector: "Information Technology"
+  bse_code: ""
+  company_name: "MANORAMA INDUSTRIES LTD"
+
+SENORES:
+  sector: "Information Technology"
+  bse_code: ""
+  company_name: "SENORES PHARMACEUTICALS L"
+
+KRISHANA:
+  sector: "Information Technology"
+  bse_code: ""
+  company_name: "KRISHANA PHOSCHEM LIMITED"
+
+FORCEMOT:
+  sector: "Information Technology"
+  bse_code: ""
+  company_name: "FORCE MOTORS LIMITED"
+
