@@ -7,3 +7,4 @@ pyotp>=2.9.0
 schedule>=1.2.0
 playwright>=1.40.0
 upstox>=2.0.3
+yfinance>=0.2.0
