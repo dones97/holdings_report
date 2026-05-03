@@ -66,6 +66,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Install Playwright Browsers
+        run: playwright install chromium
+
       # ── 4. Create runtime directories (gitignored, so not in repo) ──────────
       - name: Create runtime directories
         run: mkdir -p data/news data/earnings logs
