@@ -477,8 +477,8 @@
       <tr>
         <td width="32%" style="padding: 14px 8px 14px 0;">
           <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
-            <span style="font-size: 24px; font-weight: 800; color: {% if run_summary.weekly_pct_gain >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
-              {% if run_summary.weekly_pct_gain > 0 %}+{% endif %}{{ run_summary.weekly_pct_gain }}%
+            <span style="font-size: 24px; font-weight: 800; color: {% if run_summary.get('weekly_pct_gain', 0) >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
+              {% if run_summary.get('weekly_pct_gain', 0) > 0 %}+{% endif %}{{ run_summary.get('weekly_pct_gain', 0) }}%
             </span>
             <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Portfolio (7D)</span>
           </div>
@@ -486,8 +486,8 @@
         <td width="4%"></td>
         <td width="32%" style="padding: 14px 4px;">
           <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
-             <span style="font-size: 24px; font-weight: 800; color: {% if run_summary.nifty_pct_gain >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
-              {% if run_summary.nifty_pct_gain > 0 %}+{% endif %}{{ run_summary.nifty_pct_gain }}%
+             <span style="font-size: 24px; font-weight: 800; color: {% if run_summary.get('nifty_pct_gain', 0) >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
+              {% if run_summary.get('nifty_pct_gain', 0) > 0 %}+{% endif %}{{ run_summary.get('nifty_pct_gain', 0) }}%
             </span>
             <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Nifty 50 (7D)</span>
           </div>
@@ -495,8 +495,8 @@
         <td width="4%"></td>
         <td width="32%" style="padding: 14px 0 14px 8px;">
           <div style="background: rgba(255,255,255,0.06); border-radius: 10px; padding: 14px; text-align: center;">
-            <span style="font-size: 19px; font-weight: 800; color: {% if run_summary.weekly_abs_gain >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
-              {% if run_summary.weekly_abs_gain > 0 %}+{% endif %}Rs.{{ "{:,.0f}".format(run_summary.weekly_abs_gain | abs) }}
+            <span style="font-size: 19px; font-weight: 800; color: {% if run_summary.get('weekly_abs_gain', 0) >= 0 %}#48c78e{% else %}#f14668{% endif %}; display: block;">
+              {% if run_summary.get('weekly_abs_gain', 0) > 0 %}+{% endif %}Rs.{{ "{:,.0f}".format(run_summary.get('weekly_abs_gain', 0) | abs) }}
             </span>
             <span style="font-size: 10px; color: #8892b0; text-transform: uppercase; letter-spacing: 1px; display: block; margin-top: 4px;">Value Gain (7D)</span>
           </div>
@@ -598,6 +598,38 @@
       <div class="content-block">
         <p class="block-label">&#x1F30D; Sector Pulse</p>
         <p class="block-text">{{ holding.industry_insight }}</p>
+      </div>
+      {% endif %}
+
+      {% if holding.get('expected_return') is not none or holding.get('predicted_pe') is not none %}
+      <div class="content-block">
+        <p class="block-label">&#x1F4CA; Quantitative Analytics</p>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background: rgba(255,255,255,0.03); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); margin-top: 8px;">
+          <tr>
+            <td width="48%" style="padding: 12px; border-right: 1px solid rgba(255,255,255,0.06); vertical-align: top;">
+              <p style="font-size: 10px; color: #8892b0; text-transform: uppercase; margin: 0 0 4px 0; letter-spacing: 1px;">Factor Analysis (10Y)</p>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="font-size: 12px; color: #a0aec0; padding: 2px 0;">Exp. Return</td><td align="right" style="font-size: 12px; color: #fff; font-weight: 700;">{% if holding.get('expected_return') is not none %}{{ '{:.1f}'.format(holding.get('expected_return') * 100) }}%{% else %}N/A{% endif %}</td></tr>
+                <tr><td style="font-size: 12px; color: #a0aec0; padding: 2px 0;">Std Dev</td><td align="right" style="font-size: 12px; color: #fff; font-weight: 700;">{% if holding.get('standard_deviation') is not none %}{{ '{:.1f}'.format(holding.get('standard_deviation') * 100) }}%{% else %}N/A{% endif %}</td></tr>
+                <tr><td style="font-size: 12px; color: #a0aec0; padding: 2px 0;">Sharpe Ratio</td><td align="right" style="font-size: 12px; color: #fff; font-weight: 700;">{% if holding.get('sharpe_ratio') is not none %}{{ '{:.2f}'.format(holding.get('sharpe_ratio')) }}{% else %}N/A{% endif %}</td></tr>
+              </table>
+            </td>
+            <td width="4%"></td>
+            <td width="48%" style="padding: 12px; vertical-align: top;">
+              <p style="font-size: 10px; color: #8892b0; text-transform: uppercase; margin: 0 0 4px 0; letter-spacing: 1px;">Valuation Model</p>
+              <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr><td style="font-size: 12px; color: #a0aec0; padding: 2px 0;">Actual P/E</td><td align="right" style="font-size: 12px; color: #fff; font-weight: 700;">{% if holding.get('actual_pe') is not none %}{{ '{:.1f}'.format(holding.get('actual_pe')) }}{% else %}N/A{% endif %}</td></tr>
+                <tr><td style="font-size: 12px; color: #a0aec0; padding: 2px 0;">Predicted P/E</td><td align="right" style="font-size: 12px; color: #fff; font-weight: 700;">{% if holding.get('predicted_pe') is not none %}{{ '{:.1f}'.format(holding.get('predicted_pe')) }}{% else %}N/A{% endif %}</td></tr>
+                <tr>
+                    <td style="font-size: 12px; color: #a0aec0; padding: 2px 0;">Implied Upside</td>
+                    <td align="right" style="font-size: 12px; font-weight: 700; color: {% if holding.get('valuation_upside') is not none and holding.get('valuation_upside') > 0 %}#48c78e{% elif holding.get('valuation_upside') is not none %}#f14668{% else %}#fff{% endif %};">
+                        {% if holding.get('valuation_upside') is not none %}{% if holding.get('valuation_upside') > 0 %}+{% endif %}{{ '{:.1f}'.format(holding.get('valuation_upside')) }}%{% else %}N/A{% endif %}
+                    </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
       </div>
       {% endif %}
 

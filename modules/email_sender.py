@@ -26,6 +26,11 @@ TEMPLATE_DIR = BASE_DIR / "templates"
 
 def _render_html(digest: dict, run_summary: dict) -> str:
     """Render the Jinja2 template with digest data."""
+    # Ensure default keys exist to prevent Jinja undefined errors during selectattr
+    for h in digest.get("holdings", []):
+        h.setdefault("signal", "N/A")
+        h.setdefault("has_earnings", False)
+
     env = Environment(
         loader=FileSystemLoader(str(TEMPLATE_DIR)),
         autoescape=True,
@@ -116,7 +121,18 @@ def send_digest(digest: dict, run_summary: dict) -> bool:
         subject = f"\u26a0\ufe0f {subject} [LLM Error]"
 
     logger.info("Rendering email for %d holdings...", holdings_count)
-    html_body = _render_html(digest, run_summary)
+    try:
+        html_body = _render_html(digest, run_summary)
+    except Exception as e:
+        logger.error("Jinja rendering failed: %s", str(e))
+        subject = f"\u26a0\ufe0f {subject} [Template Error]"
+        html_body = (
+            f"<h2>Portfolio Digest failed to render</h2>"
+            f"<p>An error occurred while generating the HTML report: <b>{str(e)}</b></p>"
+            f"<p>Below is the raw data for this week:</p>"
+            f"<h3>Run Summary</h3><pre>{run_summary}</pre>"
+            f"<h3>Digest Data</h3><pre>{digest}</pre>"
+        )
 
     logger.info("Sending email: %s", subject)
     return _send_smtp(subject, html_body)
